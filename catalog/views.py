@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.views import generic
 from .models import Book, Author, BookInstance, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+import os
+import mimetypes
+from django.http.response import HttpResponse
+from django.http import FileResponse
 # Create your views here.
 
 
@@ -47,3 +50,12 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
             .filter(borrower=self.request.user) \
             .filter(status__exact='2') \
             .order_by('due_back')
+
+
+def download_file(request, id=0):
+    if id != 0:
+        book = Book.objects.get(id = id)
+        return FileResponse(book.file.open())
+    else:
+        # Load the template
+        return render(request, 'file.html')

@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from datetime import date
-
+from .validators import validate_file_extension
 # Create your models here.
 
 
@@ -14,6 +14,10 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Жанр"
+        verbose_name_plural = "Жанры"
+
 
 class Language(models.Model):
     name = models.CharField(
@@ -21,6 +25,10 @@ class Language(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Язык"
+        verbose_name_plural = "Языки"
 
 
 class Author(models.Model):
@@ -33,6 +41,10 @@ class Author(models.Model):
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
+
+    class Meta:
+        verbose_name = "Автор"
+        verbose_name_plural = "Авторы"
 
 
 class Book(models.Model):
@@ -50,6 +62,7 @@ class Book(models.Model):
     isbn = models.CharField(
         max_length=13, verbose_name="ISBN",
         help_text='Должно содержать 13 символов')
+    file = models.FileField(upload_to='files', default='files/sample.pdf', validators=[validate_file_extension])
 
     def __str__(self):
         return self.title
@@ -62,6 +75,10 @@ class Book(models.Model):
         return ', '.join([author.last_name for author in self.author.all()])
     display_author.short_description = 'Авторы'
 
+    class Meta:
+        verbose_name = "Книга"
+        verbose_name_plural = "Книги"
+
 
 class Status(models.Model):
     name = models.CharField(
@@ -69,6 +86,10 @@ class Status(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Статус"
+        verbose_name_plural = "Статусы"
 
 
 class BookInstance(models.Model):
@@ -93,3 +114,7 @@ class BookInstance(models.Model):
     @property
     def is_overdue(self):
         return self.due_back and date.today() > self.due_back
+
+    class Meta:
+        verbose_name = "Экземпляр книги"
+        verbose_name_plural = "Экземпляры книг"

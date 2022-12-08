@@ -10,4 +10,5 @@ urlpatterns = [
             name="authors"),
     re_path(r"^mybooks/$", views.LoanedBooksByUserListView.as_view(),
             name="my-borrowed"),
+    path('download/<int:id>', views.download_file),        
 ]

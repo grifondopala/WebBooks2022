@@ -11,6 +11,11 @@
           {{book.title}}
         </a>  
         {{book.genre}}
+        <button>
+          <a href="{{book.file.url}}">
+            Cкачать PDF-file
+          </a>
+        </button>
       </li>
       {% endfor %}
     </ul>
